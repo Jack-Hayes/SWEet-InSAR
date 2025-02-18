@@ -1,5 +1,5 @@
 # SWEet-InSAR
-# ❄️🌨️ **SWEet-InSAR: Snow Water Equivalent Estimation via Sentinel-1 InSAR** 🌨️❄️
+# ❄️🌨️ **Snow Water Equivalent Estimation via Sentinel-1 InSAR** 🌨️❄️
 
 Snow Hydrology (CEWA 568) Winter 2025 Final Project
 
