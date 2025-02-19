@@ -14,7 +14,7 @@ Snow Hydrology (CEWA 568) Winter 2025 Final Project
 
 Here, we focus on a singular pair of ascending and descending Sentinel-1 bursts over the San Juan National Forest in western Colorado. This limited selection is due to the limited project scope of a quarter system course. We chose Colorado as we believe the drier snowpack will allow for more-accurate estimations from SAR. We hope to address the question: Can Sentinel-1 C-band InSAR be used to retrieve meaningful SWE estimates in regions with dry snowpack?
 
-This approach is inspired by **Tarricone et al. (2023)** which utilized UAVSAR L-band to measure snowpack characteristics. However, UAVSAR flights are **expensive** and **spatially and temporally sparse**, which motivates the use of Sentinel-1 to provide more frequent, global coverage. Will NISAR be better for this and is this a waster of time in terms of scientific contribution? Absolutely, but I need a final project.
+This approach is inspired by **Tarricone et al. (2023)** which utilized UAVSAR L-band to measure snowpack characteristics. However, UAVSAR flights are **expensive** and **spatially and temporally sparse**, which motivates the use of Sentinel-1 to provide more frequent, global coverage. Will NISAR be better for this and is this a waste of time in terms of scientific contribution? Absolutely, but I need a final project.
 
 ---
 
@@ -50,14 +50,14 @@ To evaluate the effectiveness of **Sentinel-1 InSAR** for snowmelt estimation, w
 
 ### **Data Acquisition & Preprocessing**  
 - ✅ Obtain **SNOTEL data** from the [USDA](https://www.nrcs.usda.gov/wps/portal/wcc/home/aboutUs/monitoringPrograms/automatedSnowMonitoring/)
-- ✅ Obtain **Sentinel-1 CSLC (Coregistered Single Look Complex) data** from NASA's [OPERA Coregistered SLC](https://www.jpl.nasa.gov/go/opera)
-- ✅ Obtain corresponding **Copernicus GLO-30 Digital Elevation Model data** (https://portal.opentopography.org/raster?opentopoID=OTSDEM.032021.4326.3) and spatially align with respective CSLC data
-
-### **Topographic Phase Removal**  
-- Use the **COP 30 DEM** to subtract the topographic contribution from the interferometric phase.  
+- ✅ Obtain **Sentinel-1 CSLC (Coregistered Single Look Complex) data** from NASA's [OPERA Coregistered SLC](https://www.jpl.nasa.gov/go/opera) (contains topographic and atmospheric corrections, so no need for those data sources) 
+- ✅ Use the CSLC metadata to subtract the topographic contribution from the interferometric phase
 
 ### **Phase Unwrapping**  
 - Unwrap the interferometric phase to retrieve continuous surface displacement values.  
+
+### **Scale up**  
+- Repeat for many InSAR pairs 
 
 ### **Validation with SNOTEL Data**  
 - Compare interferometric phase differences with SNOTEL station SWE measurements to assess accuracy.  
