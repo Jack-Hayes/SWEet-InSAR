@@ -49,9 +49,9 @@ To evaluate the effectiveness of **Sentinel-1 InSAR** for snowmelt estimation, w
 ## **Methodology**  
 
 ### **Data Acquisition & Preprocessing**  
-✅ Obtain **SNOTEL data** from the [USDA](https://www.nrcs.usda.gov/wps/portal/wcc/home/aboutUs/monitoringPrograms/automatedSnowMonitoring/)
-✅ Obtain **Sentinel-1 CSLC (Coregistered Single Look Complex) data** from NASA's [OPERA Coregistered SLC](https://www.jpl.nasa.gov/go/opera)
-✅ Obtain corresponding **Copernicus GLO-30 Digital Elevation Model data** (https://portal.opentopography.org/raster?opentopoID=OTSDEM.032021.4326.3) and spatially align with respective CSLC data
+- ✅ Obtain **SNOTEL data** from the [USDA](https://www.nrcs.usda.gov/wps/portal/wcc/home/aboutUs/monitoringPrograms/automatedSnowMonitoring/)
+- ✅ Obtain **Sentinel-1 CSLC (Coregistered Single Look Complex) data** from NASA's [OPERA Coregistered SLC](https://www.jpl.nasa.gov/go/opera)
+- ✅ Obtain corresponding **Copernicus GLO-30 Digital Elevation Model data** (https://portal.opentopography.org/raster?opentopoID=OTSDEM.032021.4326.3) and spatially align with respective CSLC data
 
 ### **Topographic Phase Removal**  
 - Use the **COP 30 DEM** to subtract the topographic contribution from the interferometric phase.  
