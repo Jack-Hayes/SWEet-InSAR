@@ -12,6 +12,7 @@ sys.path.append('/home/jehayes/sh_final/SWEet-InSAR/misc')
 from unwrap import unwrap_phase_fft
 
 WAVELENGTH = 0.056
+inc_angle_deg = 35
 SNTL_CODES = [
     '589_CO_SNTL', '1185_CO_SNTL', '465_CO_SNTL',
     '586_CO_SNTL', '629_CO_SNTL', '713_CO_SNTL', '538_CO_SNTL'
@@ -25,42 +26,37 @@ def process_pairs(files, sntl_codes, gf_snotel_co, direction_label):
         fn_1 = files[i]
         fn_2 = files[i + 1]
 
-        # Reference dataset
-        #dsR = xr.open_dataset(fn_1, group='data', engine='h5netcdf')['VV'].rename(dict(x_coordinates='x', y_coordinates='y'))
-        tR = pd.to_datetime(xr.open_dataset(fn_1, group='identification')['zero_doppler_start_time'].data.astype('U'))
-
-        # Secondary dataset
-        dsS = xr.open_dataset(fn_2, group='data', engine='h5netcdf')['VV'].rename(dict(x_coordinates='x', y_coordinates='y'))
+        dsR = xr.open_dataset(fn_1,
+                        group='data',
+                        engine='h5netcdf')['VV'].rename(dict(x_coordinates='x', y_coordinates='y'))
+        tR = pd.to_datetime(xr.open_dataset(fn_1, 
+                                            group='identification')['zero_doppler_start_time'].data.astype('U'))
+        dsS = xr.open_dataset(fn_2,
+                            group='data',
+                            engine='h5netcdf')['VV'].rename(dict(x_coordinates='x', y_coordinates='y'))
         tS = pd.to_datetime(xr.open_dataset(fn_2, group='identification')['zero_doppler_start_time'].data.astype('U'))
-
-        # Topographically corrected phases
-        with h5py.File(fn_1, 'r') as f:
-            flat_phase1 = f['data/flattening_phase'][()]
-            crs = f['/metadata/noise_information/projection'][()]
+        ifg = dsR * np.conj(dsS)
+        ifg.attrs['reference'] = tR
+        ifg.attrs['secondary'] = tS
+        da = xr.apply_ufunc(np.angle, ifg)
+        ds = da.to_dataset(name='phase')
+        ds.rio.write_crs('EPSG:32613', inplace=True)
         with h5py.File(fn_2, 'r') as f:
-            flat_phase2 = f['data/flattening_phase'][()]
-
-        # Phase difference
-        diff_flat_phase = flat_phase2 - flat_phase1
-        da_wrapped_phase = xr.DataArray(
-            diff_flat_phase,
-            dims=['y', 'x'],
-            coords={'y': dsS.y, 'x': dsS.x}
-        ).rio.write_crs(crs)
-
-        # Unwrap phase
-        np_wrapped_phase = da_wrapped_phase.values
+            crs = f['/metadata/noise_information/projection'][()] 
+        np_wrapped_phase = ds.phase.values
         np_unwrapped = unwrap_phase_fft(np_wrapped_phase)
-        da_unwrapped = xr.DataArray(
-            np_unwrapped,
-            dims=da_wrapped_phase.dims,
-            coords=da_wrapped_phase.coords
-        ).rio.write_crs(crs)
-        da_unwrapped = da_unwrapped.where(~np.isnan(da_wrapped_phase))
-        da_displacement = da_unwrapped * (WAVELENGTH / (4 * np.pi))
+        da_unwrapped = xr.DataArray(np_unwrapped, 
+                                    dims=ds.phase.dims, 
+                                    coords=ds.phase.coords).rio.write_crs(crs)
+        da_unwrapped = da_unwrapped.where(~np.isnan(ds.phase))
+        with h5py.File(fn_2, 'r') as f:
+            wavelength = f['metadata']['processing_information']['input_burst_metadata']['wavelength'][()]
+        da_displacement = da_unwrapped * (wavelength / (4 * np.pi))
+        inc_angle_rad = np.deg2rad(inc_angle_deg)
+        da_displacement_vert = da_displacement / np.cos(inc_angle_rad)
 
         # Process SNOTEL data
-        results.extend(process_snotel_data(sntl_codes, gf_snotel_co, tR, tS, da_displacement))
+        results.extend(process_snotel_data(sntl_codes, gf_snotel_co, tR, tS, da_displacement_vert))
 
         # Save DataFrame
         df_swe = pd.DataFrame(results)
@@ -79,13 +75,13 @@ def process_snotel_data(sntl_codes, gf_snotel_co, tR, tS, da_displacement):
         swe_diff = swe_secondary - swe_reference
 
         snotel_point = gf_snotel_co.loc[gf_snotel_co['code'] == code, 'geometry'].item()
-        snotel_los_disp = da_displacement.interp(x=snotel_point.x, y=snotel_point.y, method="linear").item()
+        insar_vert_disp = da_displacement.interp(x=snotel_point.x, y=snotel_point.y, method="linear").item()
 
         results.append({
             'sntl_code': code,
             'reference_date': tR.date(),
             'secondary_date': tS.date(),
-            'snotel_los_disp': snotel_los_disp,
+            'insar_vert_disp': insar_vert_disp,
             'swe_diff': swe_diff
         })
     return results

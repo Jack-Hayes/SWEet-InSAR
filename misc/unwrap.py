@@ -26,7 +26,7 @@ def unwrap_phase_fft(wrapped):
     ----------
     wrapped : 2D numpy array
         Wrapped phase in radians (ideally in the interval [-π, π], although your data might span 
-        a slightly different range, e.g. [-2π, 2π]). The array may contain NaNs.
+        The array may contain NaNs
         
     Returns
     -------
