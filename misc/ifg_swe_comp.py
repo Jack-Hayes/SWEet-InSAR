@@ -5,9 +5,11 @@ import xarray as xr
 import h5py
 import numpy as np
 from tqdm import tqdm
-from unwrap import unwrap_phase_fft  # Ensure this is correctly imported from your specified path
 import geopandas as gpd
 import easysnowdata as esd
+import sys
+sys.path.append('/home/jehayes/sh_final/SWEet-InSAR/misc')
+from unwrap import unwrap_phase_fft
 
 WAVELENGTH = 0.056
 SNTL_CODES = [
