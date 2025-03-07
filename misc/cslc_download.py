@@ -15,7 +15,7 @@ def main():
 
     sntl_codes = [
         '589_CO_SNTL', '1185_CO_SNTL', '465_CO_SNTL',
-        '586_CO_SNTL', '629_CO_SNTL', '713_CO_SNTL', '538_CO_SNTL'
+        '586_CO_SNTL', '629_CO_SNTL', 
     ]
     gf_snotel_co_4326 = gf_snotel[gf_snotel.code.isin(sntl_codes)]
 
