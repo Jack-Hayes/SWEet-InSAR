@@ -47,7 +47,7 @@ Sentinel-1 operates primarily in Interferometric Wide (IW) swath mode for land o
 During ascending passes, Sentinel-1 moves from south to north and observes the target with a predominantly eastward line-of-sight (LOS), while during descending passes, it moves from north to south, viewing the area with a predominantly westward LOS. Although this affects the LOS displacement, our focus here is on the vertical displacement, making this orbit and LOS differentiation more relevant for interpreting plot symbology in future figures.
 
 <p align="center">
-  <img src="../images/asc_vs_desc.png" width="800" height="500">
+  <img src="../images/asc_vs_desc.png" width="1000" height="700">
 </p>
 
 For this study, we utilized OPERA (Operational Performance of Earth Observation and Research Applications) CSLC products, which are derived from Sentinel-1 SLC data. OPERA CSLC products are different than standard SLCs because they're preprocessed with coregistration, corrections for orbital inaccuracies, topographic effects, and atmospheric delays, significantly enhancing their suitability for InSAR analysis. These products are stored in the Alaska Satellite Facility archives.
@@ -71,7 +71,7 @@ The specific bursts were chosen because of their coverage of numerous SNOTEL sit
 Colorado is the site of interest due its predominantly dry snowpack that minimizes the complications associated with C‑band radar penetration as discussed earlier.
 
 <p align="center">
-  <img src="../images/aoi.png" width="900" height="500">
+  <img src="../images/aoi.png" width="1000" height="600">
 </p>
 
 ### 2.2 Theoretical Framework
@@ -186,7 +186,7 @@ The initial analysis of the scatter plot comparing InSAR-derived vertical displa
 To reduce the noise and increase interpretability, outliers are removed using the 2nd and 98th percentile thresholds where the percentiles are calculated on the data aggregated for all years. This filtering notably eliminated all ascending burst points for 2022. Subsequent separation into yearly scatter plots showed that, while most years continued to exhibit noisy patterns, the 2018 data presented a slight indication of a more coherent trend.
 
 <p align="center">
-  <img src="../images/scatter_year.png" width="900" height="700">
+  <img src="../images/scatter_year.png" width="1000" height="700">
 </p>
 
 In parallel, a series of line plots are generated for SNOTEL variables (SWE, snow depth, precipitation, average temperature, minimum temperature, and maximum temperature) with the day-of-year (January 1 to March 31) as the common x-axis. Each subplot displays different colored lines for each station, with each station having seven distinct lines representing the years 2018 through 2024, overlaid by the mean and median values of all lines. These plots reveal that all variables follow a broadly similar seasonal pattern, albeit with varying magnitudes. Notably, the precipitation data exhibits significant station-dependent variability, highlighting an aspect that warrants further analysis.
